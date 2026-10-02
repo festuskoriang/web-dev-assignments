@@ -1,86 +1,362 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap');
 
+/* =========================
+   THEME VARIABLES
+========================= */
+
+:root {
+    --brand-color: #2563eb;
+    --accent-color: #93c5fd;
+
+    --surface-color: #ffffff;
+    --background-color: #ffffff;
+
+    --primary-text: #222222;
+    --secondary-text: #666666;
+
+    --border-color: #e5e7eb;
+    --input-background: #ffffff;
+    --hover-background: #f8fafc;
+
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================
+   GLOBAL STYLES
+========================= */
+
 * {
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
-    padding: 20px;
-    background-color: #f4f7fb;
-    color: #1f2937;
+    padding: 0;
+
+    background-color: var(--background-color);
+    color: var(--primary-text);
+
     font-family: 'Open Sans', sans-serif;
 }
 
+
 /* =========================
-   PAGE HEADING CARD
+   DASHBOARD LAYOUT
 ========================= */
 
-header {
-    width: 90%;
-    max-width: 1000px;
-    margin: 30px auto;
+.dashboard {
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns: 230px 1fr;
+}
+
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    min-height: 100vh;
+    padding: 25px 18px;
+
+    background-color: #ffffff;
+    color: var(--primary-text);
+
+    border-right: 1px solid var(--border-color);
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* Sidebar Logo */
+
+.sidebar-logo {
+    margin-bottom: 35px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-logo img {
+    width: 45px;
+    height: 45px;
+
+    object-fit: contain;
+}
+
+.sidebar-logo h2 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+}
+
+
+/* =========================
+   SIDEBAR NAVIGATION
+========================= */
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav a {
+    padding: 12px 14px;
+
+    color: var(--primary-text);
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+
+    font-weight: 600;
+
+    transition:
+        background-color 200ms ease,
+        color 200ms ease,
+        transform 200ms ease;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a:focus {
+    background-color: #f1f5f9;
+    color: var(--brand-color);
+
+    transform: translateX(4px);
+}
+
+.sidebar nav a:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.main-content {
+    min-width: 0;
     padding: 30px;
-    text-align: center;
 
-    background-color: #2563eb;
-    color: white;
+    background-color: #ffffff;
+}
 
-    border: 1px solid #1d4ed8;
+
+/* =========================
+   DASHBOARD HEADER
+========================= */
+
+.dashboard-header {
+    margin-bottom: 30px;
+    padding: 25px 30px;
+
+    background-color: var(--surface-color);
+
+    border: 1px solid var(--border-color);
     border-radius: 12px;
 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 
-header img {
-    display: block;
-    width: 60px;
-    margin: 0 auto 10px;
-}
+.dashboard-header h1 {
+    margin: 0 0 6px;
 
-header h1 {
-    margin: 10px 0;
+    color: var(--primary-text);
+
     font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
+    font-size: 30px;
+}
+
+.dashboard-header p {
+    margin: 0;
+
+    color: var(--secondary-text);
+}
+
+.dashboard-header .balance {
+    padding: 12px 18px;
+
+    background-color: #f1f5f9;
+    color: var(--brand-color);
+
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+
     font-weight: 700;
 }
 
-header p {
-    margin: 0;
-    font-size: 16px;
-}
 
 /* =========================
-   SECTION CARDS
+   CATEGORY CARDS GRID
 ========================= */
 
-section {
-    width: 90%;
-    max-width: 1000px;
-    margin: 0 auto 30px;
-    padding: 25px;
+.category-grid {
+    margin-bottom: 30px;
 
-    background-color: #ffffff;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
 
-    border: 1px solid #dbe3ef;
+
+/* =========================
+   CATEGORY CARDS
+========================= */
+
+.category-card {
+    min-height: 150px;
+    padding: 22px;
+
+    background-color: var(--surface-color);
+
+    border: 1px solid var(--border-color);
     border-radius: 12px;
 
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    cursor: pointer;
+
+    transition:
+        transform 200ms ease,
+        box-shadow 200ms ease;
 }
 
+
+/* Card Hover */
+
+.category-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.10);
+}
+
+
+/* Card Keyboard Focus */
+
+.category-card:focus {
+    outline: 2px solid var(--brand-color);
+    outline-offset: 3px;
+
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.10);
+}
+
+
+/* Card Top */
+
+.category-card .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-card h3 {
+    margin: 0;
+
+    color: var(--primary-text);
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 17px;
+}
+
+
+/* Card Icon */
+
+.category-card .icon {
+    width: 38px;
+    height: 38px;
+
+    background-color: #f1f5f9;
+    color: var(--brand-color);
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+/* Card Amount */
+
+.category-card .amount {
+    margin: 15px 0 5px;
+
+    color: var(--brand-color);
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+/* Card Description */
+
+.category-card .description {
+    margin: 0;
+
+    color: var(--secondary-text);
+
+    font-size: 13px;
+}
+
+
 /* =========================
-   SECTION HEADINGS
+   CONTENT SECTIONS
 ========================= */
 
-h2 {
+.dashboard-section {
+    width: 100%;
+    margin: 0 0 30px;
+    padding: 25px;
+
+    background-color: var(--surface-color);
+
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+
+    box-shadow: var(--shadow);
+}
+
+.dashboard-section h2 {
     margin: 0 0 20px;
 
-    color: #1d4ed8;
+    color: var(--brand-color);
 
     font-family: 'Montserrat', sans-serif;
     font-size: 22px;
-    font-weight: 700;
 }
+
 
 /* =========================
    ADD EXPENSE FORM
@@ -95,9 +371,8 @@ form {
 label {
     margin-top: 5px;
 
-    color: #374151;
+    color: var(--primary-text);
 
-    font-family: 'Open Sans', sans-serif;
     font-weight: 600;
 }
 
@@ -106,22 +381,29 @@ select {
     width: 100%;
     padding: 12px;
 
-    background-color: #f8fafc;
-    color: #1f2937;
+    background-color: var(--input-background);
+    color: var(--primary-text);
 
-    border: 1px solid #cbd5e1;
+    border: 1px solid #d1d5db;
     border-radius: 7px;
 
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
 }
 
+
+/* Input Focus */
+
 input:focus,
 select:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px #dbeafe;
+
+    border-color: var(--brand-color);
+
+    box-shadow:
+        0 0 0 2px #dbeafe;
 }
+
 
 /* =========================
    BUTTON
@@ -131,7 +413,7 @@ button {
     margin-top: 10px;
     padding: 12px 18px;
 
-    background-color: #2563eb;
+    background-color: var(--brand-color);
     color: white;
 
     border: none;
@@ -142,11 +424,23 @@ button {
     font-weight: 600;
 
     cursor: pointer;
+
+    transition:
+        background-color 200ms ease,
+        transform 200ms ease;
 }
 
 button:hover {
     background-color: #1d4ed8;
+
+    transform: translateY(-2px);
 }
+
+button:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
 
 /* =========================
    EXPENSE TABLE
@@ -163,45 +457,55 @@ th,
 td {
     padding: 13px;
 
-    border: 1px solid #dbe3ef;
+    border: 1px solid var(--border-color);
 
     text-align: left;
 }
 
 th {
-    background-color: #2563eb;
-    color: white;
+    background-color: #f1f5f9;
+    color: var(--primary-text);
 
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
 }
 
 td {
+    color: var(--primary-text);
+
     font-family: 'Open Sans', sans-serif;
 }
 
-/* Alternating rows */
+
+/* Alternating Rows */
+
 tbody tr:nth-child(even) {
-    background-color: #eff6ff;
+    background-color: #fafafa;
 }
 
 tbody tr:hover {
-    background-color: #dbeafe;
+    background-color: #f1f5f9;
 }
+
 
 /* =========================
    HELP SECTION
 ========================= */
 
 .help-section summary {
-    color: #1d4ed8;
+    color: var(--brand-color);
+
     font-weight: 600;
+
     cursor: pointer;
 }
 
 .help-section p {
+    color: var(--secondary-text);
+
     line-height: 1.6;
 }
+
 
 /* =========================
    VIDEO SECTION
@@ -216,4 +520,146 @@ tbody tr:hover {
 
     border: none;
     border-radius: 8px;
+}
+
+
+/* =========================
+   DARK THEME
+========================= */
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --brand-color: #60a5fa;
+        --accent-color: #93c5fd;
+
+        --surface-color: #1e293b;
+        --background-color: #0f172a;
+
+        --primary-text: #f8fafc;
+        --secondary-text: #cbd5e1;
+
+        --border-color: #334155;
+        --input-background: #1e293b;
+        --hover-background: #334155;
+
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .sidebar {
+        background-color: #1e293b;
+    }
+
+    .sidebar nav a:hover,
+    .sidebar nav a:focus {
+        background-color: #334155;
+    }
+
+    .dashboard-header .balance {
+        background-color: #334155;
+    }
+
+    .category-card .icon {
+        background-color: #334155;
+    }
+
+    th {
+        background-color: #334155;
+        color: #f8fafc;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #1e293b;
+    }
+
+    tbody tr:hover {
+        background-color: #334155;
+    }
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+   BELOW 768px
+========================= */
+
+@media (max-width: 767px) {
+
+    /* Dashboard becomes one column */
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Sidebar becomes top navigation */
+
+    .sidebar {
+        min-height: auto;
+
+        padding: 15px;
+
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+
+    .sidebar-logo {
+        margin-bottom: 15px;
+    }
+
+
+    .sidebar nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+
+    .sidebar nav a {
+        flex: 1;
+
+        justify-content: center;
+
+        min-width: 100px;
+    }
+
+
+    /* Main Content */
+
+    .main-content {
+        padding: 15px;
+    }
+
+
+    /* Header */
+
+    .dashboard-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    /* Category Cards */
+
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .category-card {
+        min-height: 140px;
+    }
+
+
+    /* Expense Table */
+
+    .dashboard-section {
+        overflow-x: auto;
+    }
+
+
+    table {
+        min-width: 600px;
+    }
 }
