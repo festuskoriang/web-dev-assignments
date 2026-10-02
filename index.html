@@ -1,118 +1,411 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Budget Tracker</title>
+
+    <title>SpendWise Dashboard</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
-        <img src="logo.png" alt="Budget Tracker logo" width="60">
-        <h1>My Budget Tracker</h1>
-        <p>Track your income and expenses in one place.</p>
-    </header>
+    <div class="dashboard">
 
-    <section id="add-expense" class="add-expense-section">
-        <h2>Add Expense</h2>
+        <!-- =========================
+             SIDEBAR
+        ========================== -->
 
-        <form>
-            <label for="expense-name">Expense Name:</label>
-            <input type="text" id="expense-name" placeholder="Enter expense name">
+        <aside class="sidebar">
 
-            <label for="expense-amount">Amount:</label>
-            <input type="number" id="expense-amount" placeholder="Enter amount">
+            <div class="sidebar-logo">
+                <img src="logo.png" alt="SpendWise logo">
+                <h2>SpendWise</h2>
+            </div>
 
-            <label for="expense-category">Category:</label>
-            <select id="expense-category">
-                <option value="Food">Food</option>
-                <option value="Transport">Transport</option>
-                <option value="Rent">Rent</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Other">Other</option>
-            </select>
+            <nav>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#add-expense">Add Expense</a>
+                <a href="#expenses">Expenses</a>
+                <a href="#help">Help</a>
+                <a href="#tips">Budget Tips</a>
+            </nav>
 
-            <button type="button">Add Expense</button>
-        </form>
-    </section>
+        </aside>
 
-    <section class="expenses-section">
-        <h2>Your Expenses</h2>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
 
-            <tbody>
-                <tr>
-                    <td>Lunch</td>
-                    <td>$10</td>
-                    <td>Food</td>
-                    <td>2026-09-13</td>
-                </tr>
+        <main class="main-content" id="dashboard">
 
-                <tr>
-                    <td>Bus Fare</td>
-                    <td>$5</td>
-                    <td>Transport</td>
-                    <td>2026-09-14</td>
-                </tr>
+            <!-- Dashboard Header -->
 
-                <tr>
-                    <td>Rent</td>
-                    <td>$300</td>
-                    <td>Rent</td>
-                    <td>2026-09-15</td>
-                </tr>
+            <header class="dashboard-header">
 
-                <tr>
-                    <td>Movie</td>
-                    <td>$15</td>
-                    <td>Entertainment</td>
-                    <td>2026-09-16</td>
-                </tr>
+                <div>
+                    <h1>SpendWise Dashboard</h1>
 
-                <tr>
-                    <td>Groceries</td>
-                    <td>$45</td>
-                    <td>Food</td>
-                    <td>2026-09-17</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+                    <p>
+                        Track your income and expenses in one place.
+                    </p>
+                </div>
 
-    <section class="help-section">
-        <details>
-            <summary>How to use this tracker</summary>
-            <p>
-                Enter the name and amount of your expense, choose a category,
-                and click the Add Expense button. Your expenses will eventually
-                appear in the table.
-            </p>
-        </details>
-    </section>
+                <div class="balance">
+                    Balance: $1,240
+                </div>
 
-    <section class="video-section">
-        <h2>Budgeting Tips</h2>
+            </header>
 
-        <iframe
-            width="560"
-            height="315"
-            src="https://youtube.com/embed/-bqeNE1DOzA?si=jjj785UIaUe6-Fn1"
-            title="START BUDGETING with Little Money (10 Easy Tips for 2026)"
-            frameborder="0"
-            allowfullscreen>
-        </iframe>
-    </section>
+
+            <!-- =========================
+                 CATEGORY CARDS
+            ========================== -->
+
+            <section class="category-grid">
+
+                <!-- Food -->
+
+                <article class="category-card" tabindex="0">
+
+                    <div class="card-top">
+
+                        <h3>Food</h3>
+
+                        <div class="icon">
+                            🍔
+                        </div>
+
+                    </div>
+
+                    <p class="amount">$245</p>
+
+                    <p class="description">
+                        Spent this month
+                    </p>
+
+                </article>
+
+
+                <!-- Transport -->
+
+                <article class="category-card" tabindex="0">
+
+                    <div class="card-top">
+
+                        <h3>Transport</h3>
+
+                        <div class="icon">
+                            🚌
+                        </div>
+
+                    </div>
+
+                    <p class="amount">$120</p>
+
+                    <p class="description">
+                        Spent this month
+                    </p>
+
+                </article>
+
+
+                <!-- Rent -->
+
+                <article class="category-card" tabindex="0">
+
+                    <div class="card-top">
+
+                        <h3>Rent</h3>
+
+                        <div class="icon">
+                            🏠
+                        </div>
+
+                    </div>
+
+                    <p class="amount">$500</p>
+
+                    <p class="description">
+                        Monthly housing cost
+                    </p>
+
+                </article>
+
+
+                <!-- Entertainment -->
+
+                <article class="category-card" tabindex="0">
+
+                    <div class="card-top">
+
+                        <h3>Entertainment</h3>
+
+                        <div class="icon">
+                            🎮
+                        </div>
+
+                    </div>
+
+                    <p class="amount">$85</p>
+
+                    <p class="description">
+                        Spent this month
+                    </p>
+
+                </article>
+
+
+                <!-- Savings -->
+
+                <article class="category-card" tabindex="0">
+
+                    <div class="card-top">
+
+                        <h3>Savings</h3>
+
+                        <div class="icon">
+                            💰
+                        </div>
+
+                    </div>
+
+                    <p class="amount">$300</p>
+
+                    <p class="description">
+                        Saved this month
+                    </p>
+
+                </article>
+
+
+                <!-- Utilities -->
+
+                <article class="category-card" tabindex="0">
+
+                    <div class="card-top">
+
+                        <h3>Utilities</h3>
+
+                        <div class="icon">
+                            💡
+                        </div>
+
+                    </div>
+
+                    <p class="amount">$90</p>
+
+                    <p class="description">
+                        Monthly utilities
+                    </p>
+
+                </article>
+
+            </section>
+
+
+            <!-- =========================
+                 ADD EXPENSE
+            ========================== -->
+
+            <section
+                id="add-expense"
+                class="dashboard-section add-expense-section">
+
+                <h2>Add Expense</h2>
+
+                <form>
+
+                    <label for="expense-name">
+                        Expense Name:
+                    </label>
+
+                    <input
+                        type="text"
+                        id="expense-name"
+                        placeholder="Enter expense name"
+                    >
+
+
+                    <label for="expense-amount">
+                        Amount:
+                    </label>
+
+                    <input
+                        type="number"
+                        id="expense-amount"
+                        placeholder="Enter amount"
+                    >
+
+
+                    <label for="expense-category">
+                        Category:
+                    </label>
+
+                    <select id="expense-category">
+
+                        <option value="Food">
+                            Food
+                        </option>
+
+                        <option value="Transport">
+                            Transport
+                        </option>
+
+                        <option value="Rent">
+                            Rent
+                        </option>
+
+                        <option value="Entertainment">
+                            Entertainment
+                        </option>
+
+                        <option value="Savings">
+                            Savings
+                        </option>
+
+                        <option value="Utilities">
+                            Utilities
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+
+                    <button type="button">
+                        Add Expense
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- =========================
+                 EXPENSE TABLE
+            ========================== -->
+
+            <section
+                id="expenses"
+                class="dashboard-section expenses-section">
+
+                <h2>Your Expenses</h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+                            <td>Lunch</td>
+                            <td>$10</td>
+                            <td>Food</td>
+                            <td>2026-09-13</td>
+                        </tr>
+
+                        <tr>
+                            <td>Bus Fare</td>
+                            <td>$5</td>
+                            <td>Transport</td>
+                            <td>2026-09-14</td>
+                        </tr>
+
+                        <tr>
+                            <td>Rent</td>
+                            <td>$300</td>
+                            <td>Rent</td>
+                            <td>2026-09-15</td>
+                        </tr>
+
+                        <tr>
+                            <td>Movie</td>
+                            <td>$15</td>
+                            <td>Entertainment</td>
+                            <td>2026-09-16</td>
+                        </tr>
+
+                        <tr>
+                            <td>Groceries</td>
+                            <td>$45</td>
+                            <td>Food</td>
+                            <td>2026-09-17</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+            <!-- =========================
+                 HELP
+            ========================== -->
+
+            <section
+                id="help"
+                class="dashboard-section help-section">
+
+                <details>
+
+                    <summary>
+                        How to use this tracker
+                    </summary>
+
+                    <p>
+                        Enter the name and amount of your expense,
+                        choose a category, and click the Add Expense
+                        button. Your expenses will eventually appear
+                        in the table.
+                    </p>
+
+                </details>
+
+            </section>
+
+
+            <!-- =========================
+                 BUDGETING TIPS
+            ========================== -->
+
+            <section
+                id="tips"
+                class="dashboard-section video-section">
+
+                <h2>Budgeting Tips</h2>
+
+                <iframe
+                    width="560"
+                    height="315"
+                    src="https://youtube.com/embed/-bqeNE1DOzA?si=jjj785UIaUe6-Fn1"
+                    title="START BUDGETING with Little Money"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+
+            </section>
+
+        </main>
+
+    </div>
 
 </body>
+
 </html>
