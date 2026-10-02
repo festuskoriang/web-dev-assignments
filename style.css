@@ -1,123 +1,219 @@
-/* Element selector */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500;600&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7fb;
+    color: #1f2937;
+    font-family: 'Open Sans', sans-serif;
 }
 
-/* Element selector */
-h1 {
-    color: #333;
-    text-align: center;
-}
+/* =========================
+   PAGE HEADING CARD
+========================= */
 
-/* Header styling */
 header {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 30px;
     text-align: center;
-    background-color: #dff0ff;
-    padding: 20px;
-    border-radius: 8px;
+
+    background-color: #2563eb;
+    color: white;
+
+    border: 1px solid #1d4ed8;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* ID selector */
-#add-expense {
-    background-color: white;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 8px;
-}
-
-/* Descendant selector */
-.add-expense-section form input {
+header img {
     display: block;
+    width: 60px;
+    margin: 0 auto 10px;
 }
 
-/* Advanced selector: negation pseudo-class */
-input:not([type="submit"]) {
-    margin: 8px 0 15px;
-    padding: 10px;
-    width: 250px;
+header h1 {
+    margin: 10px 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
 }
 
-/* Style the dropdown */
+header p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* =========================
+   SECTION CARDS
+========================= */
+
+section {
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto 30px;
+    padding: 25px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #dbe3ef;
+    border-radius: 12px;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   SECTION HEADINGS
+========================= */
+
+h2 {
+    margin: 0 0 20px;
+
+    color: #1d4ed8;
+
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* =========================
+   ADD EXPENSE FORM
+========================= */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label {
+    margin-top: 5px;
+
+    color: #374151;
+
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+}
+
+input,
 select {
-    display: block;
-    margin: 8px 0 15px;
-    padding: 10px;
-    width: 275px;
+    width: 100%;
+    padding: 12px;
+
+    background-color: #f8fafc;
+    color: #1f2937;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
 }
 
-/* Advanced selector: focus state */
 input:focus,
 select:focus {
-    outline: 2px solid blue;
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px #dbeafe;
 }
 
-/* Button */
+/* =========================
+   BUTTON
+========================= */
+
 button {
-    padding: 10px 20px;
-    background-color: #333;
+    margin-top: 10px;
+    padding: 12px 18px;
+
+    background-color: #2563eb;
     color: white;
+
     border: none;
+    border-radius: 7px;
+
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+
     cursor: pointer;
 }
 
-/* Expenses section */
-.expenses-section {
-    background-color: #e8f5e9;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 8px;
+button:hover {
+    background-color: #1d4ed8;
 }
 
-/* Table */
+/* =========================
+   EXPENSE TABLE
+========================= */
+
 table {
     width: 100%;
+    margin-top: 10px;
+
     border-collapse: collapse;
-    background-color: white;
 }
 
-/* Table cells */
 th,
 td {
-    border: 1px solid #999;
-    padding: 12px;
+    padding: 13px;
+
+    border: 1px solid #dbe3ef;
+
     text-align: left;
 }
 
-/* Colored header row */
 th {
-    background-color: #333;
+    background-color: #2563eb;
     color: white;
+
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
 }
 
-/* Advanced selector: position pseudo-class */
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+td {
+    font-family: 'Open Sans', sans-serif;
 }
 
-/* Hover effect */
-tr:hover {
-    background-color: #d9edf7;
+/* Alternating rows */
+tbody tr:nth-child(even) {
+    background-color: #eff6ff;
 }
 
-/* Help section */
-.help-section {
-    background-color: white;
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 8px;
+tbody tr:hover {
+    background-color: #dbeafe;
 }
 
-summary {
+/* =========================
+   HELP SECTION
+========================= */
+
+.help-section summary {
+    color: #1d4ed8;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
 }
 
-/* Video section */
+.help-section p {
+    line-height: 1.6;
+}
+
+/* =========================
+   VIDEO SECTION
+========================= */
+
 .video-section {
-    background-color: white;
-    padding: 20px;
-    margin-top: 20px;
+    text-align: center;
+}
+
+.video-section iframe {
+    max-width: 100%;
+
+    border: none;
     border-radius: 8px;
 }
