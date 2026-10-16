@@ -23,6 +23,36 @@ const expenseAmountInput = document.getElementById("expense-amount");
 const expenseCategoryInput = document.getElementById("expense-category");
 const tableBody = document.getElementById("expense-table-body");
 const emptyMessage = document.getElementById("empty-message");
+const menuToggle = document.querySelector(".menu-toggle");
+const mainNavigation = document.getElementById("main-navigation");
+
+menuToggle.addEventListener("click", function () {
+    const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
+
+    menuToggle.setAttribute("aria-expanded", String(!isExpanded));
+    menuToggle.setAttribute(
+        "aria-label",
+        isExpanded ? "Open navigation menu" : "Close navigation menu"
+    );
+    mainNavigation.hidden = isExpanded;
+});
+
+mainNavigation.addEventListener("click", function (event) {
+    if (event.target.closest("a")) {
+        mainNavigation.hidden = true;
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !mainNavigation.hidden) {
+        mainNavigation.hidden = true;
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+        menuToggle.focus();
+    }
+});
 
 // Connect category names to their dashboard display elements.
 const categoryDisplays = {
@@ -192,7 +222,7 @@ function updateDashboard() {
 
     // Make a decision about the budget status.
     if (remaining < 0) {
-        balanceDisplay.style.color = "#dc2626";
+        balanceDisplay.style.color = "#fecaca";
 
         budgetMessage.textContent =
             "Warning: You have exceeded your budget by " +
@@ -207,14 +237,14 @@ function updateDashboard() {
 
         budgetMessage.className = "message";
     } else if (remaining === 0) {
-        balanceDisplay.style.color = "#d97706";
+        balanceDisplay.style.color = "#fde68a";
 
         budgetMessage.textContent =
             "Your entire budget has been used.";
 
         budgetMessage.className = "message warning";
     } else {
-        balanceDisplay.style.color = "#16a34a";
+        balanceDisplay.style.color = "#bbf7d0";
 
         budgetMessage.textContent =
             "You are within budget. You have " +
