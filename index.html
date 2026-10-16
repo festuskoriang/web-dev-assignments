@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,20 +15,30 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
+            <button
+                class="menu-toggle"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="main-navigation"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="sidebar-logo">
                 <div class="logo-icon">S</div>
                 <h2>SpendWise</h2>
             </div>
 
-            <nav aria-label="Main navigation">
+            <nav id="main-navigation" aria-label="Main navigation" hidden>
                 <a class="active" href="#dashboard">Dashboard</a>
                 <a href="#add-expense">Add Expense</a>
                 <a href="#expenses">Expenses</a>
                 <a href="#budget-settings">Budget Settings</a>
                 <a href="#help">Help</a>
             </nav>
-
-            <p class="sidebar-note">Manage your money wisely.</p>
         </aside>
 
         <!-- Main dashboard -->
@@ -46,33 +55,6 @@
                     Remaining Balance: $0.00
                 </div>
             </header>
-
-            <!-- Budget settings -->
-            <section class="dashboard-section" id="budget-settings">
-                <div class="section-heading">
-                    <div>
-                        <h2>Monthly Budget</h2>
-                        <p>Set the amount you plan to spend this month.</p>
-                    </div>
-                </div>
-
-                <form id="budget-form" class="budget-form">
-                    <label for="monthly-budget">Budget amount ($)</label>
-                    <input
-                        type="number"
-                        id="monthly-budget"
-                        min="0"
-                        step="0.01"
-                        placeholder="Enter your budget"
-                        required
-                    >
-                    <button type="submit">Set Budget</button>
-                </form>
-
-                <p id="budget-message" class="message" aria-live="polite">
-                    Set a budget to get started.
-                </p>
-            </section>
 
             <!-- Summary cards -->
             <section class="summary-grid" aria-label="Budget summary">
@@ -92,6 +74,32 @@
                 </article>
             </section>
 
+            <!-- Budget settings -->
+            <section class="dashboard-section budget-section" id="budget-settings">
+                <div class="section-heading">
+                    <div>
+                        <h2>Monthly Budget</h2>
+                        <p>Set the amount you plan to spend this month.</p>
+                    </div>
+                </div>
+
+                <form id="budget-form" class="budget-form">
+                    <label for="monthly-budget">Budget amount ($)</label>
+                    <input
+                        type="number"
+                        id="monthly-budget"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
+                    <button type="submit">Set Budget</button>
+                </form>
+
+                <p id="budget-message" class="message" aria-live="polite">
+                    Set a budget to get started.
+                </p>
+            </section>
+
             <!-- Category cards -->
             <section class="category-section">
                 <div class="section-heading">
@@ -105,7 +113,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Food</h3>
-                            <span class="category-icon">🍎</span>
                         </div>
                         <p class="amount" id="category-food">$0.00</p>
                         <p class="description">Total spent</p>
@@ -114,7 +121,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Transport</h3>
-                            <span class="category-icon">🚌</span>
                         </div>
                         <p class="amount" id="category-transport">$0.00</p>
                         <p class="description">Total spent</p>
@@ -123,7 +129,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Rent</h3>
-                            <span class="category-icon">🏠</span>
                         </div>
                         <p class="amount" id="category-rent">$0.00</p>
                         <p class="description">Total spent</p>
@@ -132,7 +137,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Entertainment</h3>
-                            <span class="category-icon">🎮</span>
                         </div>
                         <p class="amount" id="category-entertainment">$0.00</p>
                         <p class="description">Total spent</p>
@@ -141,7 +145,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Savings</h3>
-                            <span class="category-icon">💰</span>
                         </div>
                         <p class="amount" id="category-savings">$0.00</p>
                         <p class="description">Total recorded</p>
@@ -150,7 +153,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Utilities</h3>
-                            <span class="category-icon">💡</span>
                         </div>
                         <p class="amount" id="category-utilities">$0.00</p>
                         <p class="description">Total spent</p>
@@ -159,7 +161,6 @@
                     <article class="category-card" tabindex="0">
                         <div class="card-top">
                             <h3>Other</h3>
-                            <span class="category-icon">📦</span>
                         </div>
                         <p class="amount" id="category-other">$0.00</p>
                         <p class="description">Total spent</p>
@@ -181,7 +182,6 @@
                     <input
                         type="text"
                         id="expense-name"
-                        placeholder="e.g. Groceries"
                         maxlength="100"
                         required
                     >
@@ -192,7 +192,6 @@
                         id="expense-amount"
                         min="0.01"
                         step="0.01"
-                        placeholder="e.g. 25.50"
                         required
                     >
 
