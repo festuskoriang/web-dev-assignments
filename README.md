@@ -1,103 +1,34 @@
-# My Budget Tracker
+# SpendWise
 
-## Project Description
-
-My Budget Tracker is a simple web application designed to help users keep track of their income and expenses in one place.
-
-This project is being developed step by step throughout the course. The current version focuses on the HTML structure and CSS visual design of the application.
+SpendWise is a lightweight, browser-based budget tracker. Set a monthly budget, record expenses, and see how your spending affects your remaining balance.
 
 ## Features
 
-* Budget Tracker header with logo and description
-* Add Expense section
-* Expense name input
-* Amount input
-* Expense category selection
-* Add Expense button
-* Expense table showing sample expenses
-* Help section explaining how to use the tracker
-* Budgeting tips video
-* Professional blue color theme
-* Custom Google Fonts
-* Styled forms and table
-* Responsive and organized card-style sections
+- Set and update a monthly budget.
+- Add expenses with a name, amount, and category.
+- Track totals for Food, Transport, Rent, Entertainment, Savings, Utilities, and Other.
+- View the total budget, total expenses, expense count, and remaining balance.
+- Get a status message when you are within or over budget.
+- Review and delete expenses from the expense table.
+- Use the responsive dashboard and collapsible top navigation on desktop or mobile.
 
-## Project Files
+## Run locally
 
-### `index.html`
+No package installation or build step is required.
 
-The `index.html` file contains the main structure of the Budget Tracker.
+1. Download or clone this project.
+2. Open `index.html` in a modern web browser.
+3. Set your monthly budget, then use **Add Expense** to record spending.
 
-It includes:
+You can also serve the project directory with any static web server and open the local URL it provides.
 
-* The page title and CSS stylesheet link
-* The Budget Tracker header and logo
-* The Add Expense form
-* Input fields for expense name and amount
-* Category selection
-* Add Expense button
-* Expense table containing sample expenses
-* Help section
-* Budgeting Tips video
+## Project files
 
-The HTML provides the structure and content that is displayed on the webpage.
+- `index.html` — Dashboard structure, forms, category cards, and expense table.
+- `style.css` — Responsive layout, visual styling, and light/dark color themes.
+- `script.js` — Budget calculations, form validation, navigation menu, and expense management.
+- `logo.png` — Project logo asset.
 
-### `style.css`
+## Data and privacy
 
-The `style.css` file controls the visual appearance of the Budget Tracker.
-
-It includes:
-
-* A professional blue color palette
-* Google Fonts using Montserrat and Open Sans
-* Page background styling
-* Heading styles
-* Card-style sections
-* Form and input styling
-* Button styling
-* Expense table styling
-* Alternating table row colors
-* Borders, margins, padding, and border-radius
-* Hover and focus effects
-
-The CSS Box Model is used throughout the project to create spacing and visually separate different sections.
-
-## Design
-
-The project uses a professional blue color palette with white cards and a light background.
-
-### Typography
-
-* **Montserrat** is used for headings.
-* **Open Sans** is used for body text, labels, forms, and table content.
-
-This creates a clear visual hierarchy and improves readability.
-
-## Current Project Status
-
-This is an early version of the Budget Tracker. The current focus is on the visual design and structure.
-
-The application does not yet perform calculations or dynamically add expenses. These features can be added in later stages of the project.
-
-## Future Improvements
-
-Future versions of the project may include:
-
-* Adding expenses dynamically
-* Calculating total expenses
-* Tracking income
-* Calculating remaining balance
-* Filtering expenses by category
-* Adding JavaScript functionality
-* Improving responsive design
-
-## Technologies Used
-
-* HTML5
-* CSS3
-* Google Fonts
-* GitHub
-
-## Author
-
-Budget Tracker Project
+Expense and budget data are stored in the page's JavaScript memory only. Reloading or closing the page clears the current entries; the app does not send data to a server or save it between visits.
