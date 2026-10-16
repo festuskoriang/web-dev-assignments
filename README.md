@@ -27,7 +27,6 @@ You can also serve the project directory with any static web server and open the
 - `index.html` — Dashboard structure, forms, category cards, and expense table.
 - `style.css` — Responsive layout, visual styling, and light/dark color themes.
 - `script.js` — Budget calculations, form validation, navigation menu, and expense management.
-- `logo.png` — Project logo asset.
 
 ## Data and privacy
 
