@@ -20,8 +20,8 @@ SpendWise provides a clean, responsive dashboard that makes managing personal fi
 
 The project was developed using the following technologies:
 
-- **HTML5:** Used to create the structure and content of the application.
-- **CSS3:** Used for styling, responsive design, CSS Grid, Flexbox, and layouts.
+- **HTML:** Used to create the structure and content of the application.
+- **CSS:** Used for styling, responsive design, CSS Grid, Flexbox, and layouts.
 - **JavaScript:** Used to implement application functionality, calculations, conditional statements, arrays, loops, event listeners, and DOM manipulation.
 - **Chart.js:** Used to create expense category and spending trend charts.
 - **Google Fonts:** Used to improve typography and readability.
