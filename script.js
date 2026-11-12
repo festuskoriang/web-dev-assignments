@@ -1,383 +1,243 @@
-"use strict";
-
-// ==========================================
-// 1. APPLICATION DATA AND DOM ELEMENTS
-// ==========================================
-
-let monthlyBudget = 0;
-let totalExpenses = 0;
-
-const expenses = [];
-
-const budgetForm = document.getElementById("budget-form");
-const budgetInput = document.getElementById("monthly-budget");
-const budgetTotalDisplay = document.getElementById("budget-total");
-const expenseTotalDisplay = document.getElementById("expense-total");
-const expenseCountDisplay = document.getElementById("expense-count");
-const balanceDisplay = document.getElementById("current-balance");
-const budgetMessage = document.getElementById("budget-message");
-const expenseMessage = document.getElementById("expense-message");
-const expenseForm = document.getElementById("expense-form");
-const expenseNameInput = document.getElementById("expense-name");
-const expenseAmountInput = document.getElementById("expense-amount");
-const expenseCategoryInput = document.getElementById("expense-category");
-const tableBody = document.getElementById("expense-table-body");
-const emptyMessage = document.getElementById("empty-message");
-const menuToggle = document.querySelector(".menu-toggle");
-const mainNavigation = document.getElementById("main-navigation");
-
-menuToggle.addEventListener("click", function () {
-    const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
-
-    menuToggle.setAttribute("aria-expanded", String(!isExpanded));
-    menuToggle.setAttribute(
-        "aria-label",
-        isExpanded ? "Open navigation menu" : "Close navigation menu"
-    );
-    mainNavigation.hidden = isExpanded;
-});
-
-mainNavigation.addEventListener("click", function (event) {
-    if (event.target.closest("a")) {
-        mainNavigation.hidden = true;
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation menu");
-    }
-});
-
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape" && !mainNavigation.hidden) {
-        mainNavigation.hidden = true;
-        menuToggle.setAttribute("aria-expanded", "false");
-        menuToggle.setAttribute("aria-label", "Open navigation menu");
-        menuToggle.focus();
-    }
-});
-
-// Connect category names to their dashboard display elements.
-const categoryDisplays = {
-    Food: document.getElementById("category-food"),
-    Transport: document.getElementById("category-transport"),
-    Rent: document.getElementById("category-rent"),
-    Entertainment: document.getElementById("category-entertainment"),
-    Savings: document.getElementById("category-savings"),
-    Utilities: document.getElementById("category-utilities"),
-    Other: document.getElementById("category-other")
+// SpendWise dashboard functionality
+const STORAGE_KEYS = { budget: "spendwise_budget", expenses: "spendwise_expenses", theme: "spendwise_theme" };
+const categories = ["Food", "Transport", "Rent", "Entertainment", "Utilities", "Health", "Other"];
+const categoryColors = {
+  Food: "#2878f0", Transport: "#10a879", Rent: "#f5a623",
+  Entertainment: "#8b45e9", Utilities: "#e45b91", Health: "#16a6b8", Other: "#aab6ce"
 };
 
-// ==========================================
-// 2. HELPER FUNCTION FOR MONEY
-// ==========================================
+let budget = Number(localStorage.getItem(STORAGE_KEYS.budget)) || 0;
+let expenses = JSON.parse(localStorage.getItem(STORAGE_KEYS.expenses) || "[]");
+let categoryChart = null;
+let trendChart = null;
 
-function formatMoney(amount) {
-    return "$" + amount.toFixed(2);
+const $ = (id) => document.getElementById(id);
+const money = (amount) => "$" + Number(amount || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const safeDate = (value) => {
+  const date = new Date(value + "T00:00:00");
+  return Number.isNaN(date.getTime()) ? new Date() : date;
+};
+const formatDate = (value) => safeDate(value).toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEYS.budget, String(budget));
+  localStorage.setItem(STORAGE_KEYS.expenses, JSON.stringify(expenses));
 }
 
-// ==========================================
-// 3. SET THE MONTHLY BUDGET
-// ==========================================
-
-budgetForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const inputValue = budgetInput.value.trim();
-    const budget = Number(inputValue);
-
-    // Validate the budget before saving it.
-    if (
-        inputValue === "" ||
-        !Number.isFinite(budget) ||
-        budget < 0
-    ) {
-        budgetMessage.textContent =
-            "Please enter a valid budget of zero or more.";
-        budgetMessage.className = "message error";
-        return;
-    }
-
-    monthlyBudget = budget;
-
-    budgetMessage.textContent = "Your monthly budget has been updated.";
-    budgetMessage.className = "message success";
-
-    updateDashboard();
-});
-
-// ==========================================
-// 4. CALCULATE TOTAL EXPENSES USING A LOOP
-// ==========================================
-
-function calculateTotalExpenses() {
-    let total = 0;
-
-    for (const expense of expenses) {
-        total += expense.amount;
-    }
-
-    totalExpenses = total;
-
-    return total;
+function totalExpenses() {
+  return expenses.reduce((sum, item) => sum + Number(item.amount), 0);
 }
-
-// ==========================================
-// 5. CALCULATE REMAINING BALANCE
-// ==========================================
-
-function calculateRemainingBalance() {
-    return monthlyBudget - calculateTotalExpenses();
-}
-
-// ==========================================
-// 6. CALCULATE TOTALS BY CATEGORY
-// ==========================================
-
-function calculateCategoryTotals() {
-    const totals = {
-        Food: 0,
-        Transport: 0,
-        Rent: 0,
-        Entertainment: 0,
-        Savings: 0,
-        Utilities: 0,
-        Other: 0
-    };
-
-    // Process every stored expense.
-    for (const expense of expenses) {
-        if (Object.hasOwn(totals, expense.category)) {
-            totals[expense.category] += expense.amount;
-        }
-    }
-
-    return totals;
-}
-
-// ==========================================
-// 7. DISPLAY EXPENSES IN THE TABLE
-// ==========================================
-
-function renderExpenses() {
-    // Remove old rows so the table can be rebuilt from the array.
-    tableBody.replaceChildren();
-
-    // Use a loop to display every expense record.
-    for (let index = 0; index < expenses.length; index++) {
-        const expense = expenses[index];
-
-        const row = document.createElement("tr");
-
-        const nameCell = document.createElement("td");
-        const amountCell = document.createElement("td");
-        const categoryCell = document.createElement("td");
-        const dateCell = document.createElement("td");
-        const actionCell = document.createElement("td");
-
-        nameCell.textContent = expense.name;
-        amountCell.textContent = formatMoney(expense.amount);
-        categoryCell.textContent = expense.category;
-        dateCell.textContent = expense.date;
-
-        const deleteButton = document.createElement("button");
-
-        deleteButton.type = "button";
-        deleteButton.textContent = "Delete";
-        deleteButton.className = "delete-expense";
-        deleteButton.dataset.index = String(index);
-        deleteButton.setAttribute(
-            "aria-label",
-            "Delete " + expense.name
-        );
-
-        actionCell.appendChild(deleteButton);
-
-        row.append(
-            nameCell,
-            amountCell,
-            categoryCell,
-            dateCell,
-            actionCell
-        );
-
-        tableBody.appendChild(row);
-    }
-
-    // Show an empty-state message when no records exist.
-    emptyMessage.hidden = expenses.length > 0;
-}
-
-// ==========================================
-// 8. UPDATE DASHBOARD CONTENT
-// ==========================================
 
 function updateDashboard() {
-    const total = calculateTotalExpenses();
-    const remaining = monthlyBudget - total;
-    const categoryTotals = calculateCategoryTotals();
+  const total = totalExpenses();
+  const remaining = budget - total;
+  const percentage = budget > 0 ? (total / budget) * 100 : 0;
 
-    // Update the summary cards and remaining balance.
-    budgetTotalDisplay.textContent = formatMoney(monthlyBudget);
-    expenseTotalDisplay.textContent = formatMoney(total);
-    expenseCountDisplay.textContent = String(expenses.length);
-    balanceDisplay.textContent = "Remaining Balance: " + formatMoney(remaining);
+  $("budgetValue").textContent = money(budget);
+  $("expenseValue").textContent = money(total);
+  $("countValue").textContent = expenses.length;
+  $("savingsValue").textContent = money(remaining);
+  $("heroBalance").textContent = money(remaining);
+  $("donutTotal").textContent = money(total);
 
-    // Make a decision about the budget status.
-    if (remaining < 0) {
-        balanceDisplay.style.color = "#fecaca";
+  $("budgetProgress").style.width = `${Math.min(percentage, 100)}%`;
+  $("budgetProgressText").textContent = budget > 0
+    ? `${Math.round(percentage)}% of your budget used`
+    : "Set your monthly budget";
+  $("expenseNote").textContent = budget > 0 && percentage > 100
+    ? "You are over your budget"
+    : "Your spending so far";
+  $("expenseNote").classList.toggle("negative", budget > 0 && percentage > 100);
 
-        budgetMessage.textContent =
-            "Warning: You have exceeded your budget by " +
-            formatMoney(Math.abs(remaining)) + ".";
+  if (budget <= 0) {
+    $("balanceCaption").textContent = "Set a budget to get started";
+  } else if (remaining < 0) {
+    $("balanceCaption").textContent = "You are over budget";
+  } else {
+    $("balanceCaption").textContent = `${Math.round((remaining / budget) * 100)}% of budget remaining`;
+  }
 
-        budgetMessage.className = "message error";
-    } else if (monthlyBudget === 0) {
-        balanceDisplay.style.color = "";
+  if (budget > 0 && total > budget) {
+    $("encouragementTitle").textContent = "Let's get back on track";
+    $("encouragementText").textContent = "Your expenses are above your budget. Review your recent spending and adjust where you can.";
+  } else if (budget > 0 && percentage >= 80) {
+    $("encouragementTitle").textContent = "Almost at your limit";
+    $("encouragementText").textContent = "You have used most of your budget. Keep an eye on non-essential spending.";
+  } else if (budget > 0) {
+    $("encouragementTitle").textContent = "Great progress!";
+    $("encouragementText").textContent = "You are within your budget. Keep making thoughtful spending decisions.";
+  } else {
+    $("encouragementTitle").textContent = "Small steps add up!";
+    $("encouragementText").textContent = "Record your expenses and set a monthly budget to keep your spending on track.";
+  }
 
-        budgetMessage.textContent =
-            "Set a monthly budget to track your spending.";
-
-        budgetMessage.className = "message";
-    } else if (remaining === 0) {
-        balanceDisplay.style.color = "#fde68a";
-
-        budgetMessage.textContent =
-            "Your entire budget has been used.";
-
-        budgetMessage.className = "message warning";
-    } else {
-        balanceDisplay.style.color = "#bbf7d0";
-
-        budgetMessage.textContent =
-            "You are within budget. You have " +
-            formatMoney(remaining) + " remaining.";
-
-        budgetMessage.className = "message success";
-    }
-
-    // Update every category card.
-    for (const category in categoryDisplays) {
-        categoryDisplays[category].textContent =
-            formatMoney(categoryTotals[category]);
-    }
-
-    // Refresh the expense table.
-    renderExpenses();
+  renderTransactions($("searchInput").value);
+  renderCharts();
 }
 
-// ==========================================
-// 9. ADD A NEW EXPENSE
-// ==========================================
+function renderTransactions(searchTerm = "") {
+  const body = $("transactionBody");
+  const query = searchTerm.trim().toLowerCase();
+  const filtered = [...expenses]
+    .filter(item => `${item.name} ${item.category} ${item.date}`.toLowerCase().includes(query))
+    .sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
 
-expenseForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+  if (!filtered.length) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="5">${expenses.length ? "No transactions match your search." : "No expenses yet. Add your first expense to get started."}</td></tr>`;
+    return;
+  }
 
-    const name = expenseNameInput.value.trim();
-    const amountText = expenseAmountInput.value.trim();
-    const amount = Number(amountText);
-    const category = expenseCategoryInput.value;
+  body.innerHTML = filtered.map(item => {
+    const color = categoryColors[item.category] || categoryColors.Other;
+    return `<tr>
+      <td>${formatDate(item.date)}</td>
+      <td>${escapeHTML(item.name)}</td>
+      <td><span class="category-tag" style="background:${color}18;color:${color}">${escapeHTML(item.category)}</span></td>
+      <td class="amount">-${money(item.amount)}</td>
+      <td><button class="delete-button" data-delete="${item.id}" aria-label="Delete ${escapeHTML(item.name)}" title="Delete expense">×</button></td>
+    </tr>`;
+  }).join("");
+}
 
-    // Validate the expense name.
-    if (name === "") {
-        expenseMessage.textContent =
-            "Please enter an expense name.";
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
 
-        expenseMessage.className = "message error";
-        expenseNameInput.focus();
-        return;
+function renderCharts() {
+  if (typeof Chart === "undefined") return;
+  const totals = categories.map(category =>
+    expenses.filter(item => item.category === category).reduce((sum, item) => sum + Number(item.amount), 0)
+  );
+  const hasData = totals.some(value => value > 0);
+  const chartValues = hasData ? totals : [1];
+  const chartColors = hasData ? categories.map(category => categoryColors[category]) : ["#e9eef7"];
+
+  if (categoryChart) categoryChart.destroy();
+  categoryChart = new Chart($("categoryChart"), {
+    type: "doughnut",
+    data: { labels: hasData ? categories : ["No expenses"], datasets: [{ data: chartValues, backgroundColor: chartColors, borderWidth: 0, hoverOffset: 5 }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: "72%", plugins: { legend: { display: false }, tooltip: { enabled: hasData } } }
+  });
+
+  const legend = $("categoryLegend");
+  if (!hasData) {
+    legend.innerHTML = '<p class="empty-chart">Add expenses to see your categories.</p>';
+  } else {
+    legend.innerHTML = categories.map((category, index) => {
+      const amount = totals[index];
+      if (!amount) return "";
+      const percent = totalExpenses() ? Math.round((amount / totalExpenses()) * 100) : 0;
+      return `<div class="legend-row"><span class="legend-dot" style="background:${categoryColors[category]}"></span><span class="legend-name">${category}</span><span class="legend-amount">${money(amount)}</span><span class="legend-percent">${percent}%</span></div>`;
+    }).join("");
+  }
+
+  const today = new Date();
+  const days = [];
+  const values = [];
+  for (let offset = 6; offset >= 0; offset--) {
+    const day = new Date(today);
+    day.setDate(today.getDate() - offset);
+    const dateKey = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, "0")}-${String(day.getDate()).padStart(2, "0")}`;
+    days.push(day.toLocaleDateString("en-US", { weekday: "short" }));
+    values.push(expenses.filter(item => item.date === dateKey).reduce((sum, item) => sum + Number(item.amount), 0));
+  }
+  if (trendChart) trendChart.destroy();
+  trendChart = new Chart($("trendChart"), {
+    type: "line",
+    data: { labels: days, datasets: [{ data: values, borderColor: "#2878f0", backgroundColor: "rgba(40,120,240,.10)", fill: true, tension: .38, borderWidth: 2.5, pointRadius: 3.5, pointBackgroundColor: "#ffffff", pointBorderColor: "#2878f0", pointBorderWidth: 2 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: context => money(context.parsed.y) } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: "#8491aa", font: { size: 10 } } },
+        y: { beginAtZero: true, grid: { color: "rgba(130,150,185,.13)" }, ticks: { color: "#8491aa", font: { size: 10 }, callback: value => "$" + value } }
+      }
     }
+  });
+}
 
-    // Validate the expense amount.
-    if (
-        amountText === "" ||
-        !Number.isFinite(amount) ||
-        amount <= 0
-    ) {
-        expenseMessage.textContent =
-            "Enter an expense amount greater than zero.";
+$("expenseForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = $("expenseName").value.trim();
+  const amount = Number($("expenseAmount").value);
+  const category = $("expenseCategory").value;
+  const date = $("expenseDate").value;
 
-        expenseMessage.className = "message error";
-        expenseAmountInput.focus();
-        return;
-    }
+  if (!name || !Number.isFinite(amount) || amount <= 0 || !category || !date) {
+    $("expenseMessage").textContent = "Please complete every field with a valid amount.";
+    return;
+  }
 
-    // Validate the selected category.
-    if (!Object.hasOwn(categoryDisplays, category)) {
-        expenseMessage.textContent =
-            "Please select a valid category.";
-
-        expenseMessage.className = "message error";
-        expenseCategoryInput.focus();
-        return;
-    }
-
-    // Create a new expense object.
-    const expense = {
-        id: Date.now() + Math.random(),
-        name: name,
-        amount: Math.round(amount * 100) / 100,
-        category: category,
-        date: new Date().toLocaleDateString("en-CA")
-    };
-
-    // Store the record in the array.
-    expenses.push(expense);
-
-    // Update the webpage after the data changes.
-    updateDashboard();
-
-    expenseMessage.textContent =
-        "Expense added successfully.";
-
-    expenseMessage.className = "message success";
-
-    // Reset the form for the next entry.
-    expenseForm.reset();
-    expenseNameInput.focus();
-
-    console.log("Expense added:", expense);
+  expenses.push({ id: Date.now(), name, amount: Math.round(amount * 100) / 100, category, date });
+  saveData();
+  updateDashboard();
+  $("expenseForm").reset();
+  $("expenseDate").value = getLocalDateString();
+  $("expenseMessage").textContent = "Expense saved successfully.";
 });
 
-// ==========================================
-// 10. DELETE AN EXPENSE
-// ==========================================
-
-// Event delegation: handle clicks on Delete buttons in the table.
-tableBody.addEventListener("click", function (event) {
-    const button = event.target.closest(".delete-expense");
-
-    if (!button || !tableBody.contains(button)) {
-        return;
-    }
-
-    const index = Number(button.dataset.index);
-
-    if (
-        !Number.isInteger(index) ||
-        index < 0 ||
-        index >= expenses.length
-    ) {
-        return;
-    }
-
-    const deletedExpense = expenses[index];
-
-    // Remove one record from the array.
-    expenses.splice(index, 1);
-
-    // Recalculate and redraw the dashboard.
-    updateDashboard();
-
-    expenseMessage.textContent =
-        deletedExpense.name + " was deleted.";
-
-    expenseMessage.className = "message success";
-
-    console.log("Expense deleted:", deletedExpense);
+$("budgetForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const amount = Number($("budgetAmount").value);
+  if (!Number.isFinite(amount) || amount <= 0) {
+    $("budgetMessage").textContent = "Enter a budget greater than zero.";
+    return;
+  }
+  budget = Math.round(amount * 100) / 100;
+  saveData();
+  updateDashboard();
+  $("budgetAmount").value = "";
+  $("budgetMessage").textContent = "Your monthly budget has been updated.";
 });
 
-// ==========================================
-// 11. INITIALIZE THE APPLICATION
-// ==========================================
+$("transactionBody").addEventListener("click", event => {
+  const button = event.target.closest("[data-delete]");
+  if (!button) return;
+  const id = Number(button.dataset.delete);
+  expenses = expenses.filter(item => item.id !== id);
+  saveData();
+  updateDashboard();
+});
 
-updateDashboard();
+$("searchInput").addEventListener("input", event => renderTransactions(event.target.value));
+$("clearSearch").addEventListener("click", () => {
+  $("searchInput").value = "";
+  renderTransactions();
+});
+$("quickAdd").addEventListener("click", () => {
+  $("expenseName").focus();
+  $("expenseForm").scrollIntoView({ behavior: "smooth", block: "center" });
+});
+$("quickBudget").addEventListener("click", () => {
+  $("budgetAmount").focus();
+  $("budgetForm").scrollIntoView({ behavior: "smooth", block: "center" });
+});
+$("menuToggle").addEventListener("click", () => $("sidebar").classList.toggle("open"));
+document.querySelectorAll(".nav-link").forEach(link => {
+  link.addEventListener("click", () => {
+    document.querySelectorAll(".nav-link").forEach(item => item.classList.remove("active"));
+    link.classList.add("active");
+    $("sidebar").classList.remove("open");
+  });
+});
+$("themeToggle").addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  localStorage.setItem(STORAGE_KEYS.theme, document.body.classList.contains("dark-mode") ? "dark" : "light");
+});
 
-console.log("SpendWise JavaScript loaded successfully.");
+function getLocalDateString() {
+  const now = new Date();
+  const offset = now.getTimezoneOffset();
+  return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10);
+}
+
+function initialise() {
+  $("todayLabel").textContent = new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  $("year").textContent = new Date().getFullYear();
+  $("expenseDate").value = getLocalDateString();
+  if (localStorage.getItem(STORAGE_KEYS.theme) === "dark") document.body.classList.add("dark-mode");
+  updateDashboard();
+}
+initialise();
